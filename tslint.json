@@ -1,0 +1,12 @@
+{
+  "rules": {
+    "no-any": true,
+    "no-empty-interface": true,
+    "only-arrow-functions": true,
+    "typedef": [true, "call-signature", "arrow-call-signature", "parameter", "arrow-parameter", "property-declaration", "variable-declaration", "member-variable-declaration"],
+    "triple-equals": [true, "allow-undefined-check", "allow-null-check"],
+    "array-type": [true, "array"],
+    "arrow-return-shorthand": true,
+    "class-name": true
+  }
+}
