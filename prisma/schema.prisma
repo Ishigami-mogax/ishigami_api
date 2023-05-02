@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model category {
+  id                String      @id @db.Uuid
+  name              String?     @db.VarChar
+  level             Int?
+  super_category_id String?     @db.Uuid
+  category          category?   @relation("categoryTocategory", fields: [super_category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "category_fkey")
+  other_category    category[]  @relation("categoryTocategory")
+  word_list         word_list[]
+}
+
+model compose {
+  to_compose                           String  @db.Uuid
+  composed_by                          String  @db.Uuid
+  reading_compose_to_composeToreading  reading @relation("compose_to_composeToreading", fields: [to_compose], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "compose_reading_id_fk")
+  reading_compose_composed_byToreading reading @relation("compose_composed_byToreading", fields: [composed_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "compose_reading_id_fk2")
+
+  @@id([to_compose, composed_by], map: "compose_pk")
+}
+
+model reading {
+  id                                   String    @id @db.Uuid
+  reading                              String    @db.VarChar(256)
+  isOnyumi                             Boolean
+  word_id                              String    @db.Uuid
+  compose_compose_to_composeToreading  compose[] @relation("compose_to_composeToreading")
+  compose_compose_composed_byToreading compose[] @relation("compose_composed_byToreading")
+  word                                 word      @relation(fields: [word_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([word_id, reading], map: "reading_word_id_reading_uindex")
+}
+
+model role {
+  id   String @id(map: "role_pk") @db.Uuid
+  name String @db.VarChar
+  user user[]
+}
+
+model session {
+  id           String         @id @db.Uuid
+  type         String         @db.VarChar(256)
+  date         DateTime?      @db.Date
+  user_id      String         @db.Uuid
+  user         user           @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  session_list session_list[]
+}
+
+model session_list {
+  word_id    String   @db.Uuid
+  session_id String   @db.Uuid
+  pair       Boolean?
+  guess      Boolean?
+  recall     Boolean?
+  type       Boolean?
+  session    session  @relation(fields: [session_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  word       word     @relation(fields: [word_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([word_id, session_id], map: "session_list_pk")
+}
+
+model significations {
+  id       String @id(map: "significations_pk") @db.Uuid
+  word_id  String @db.Uuid
+  priority Int    @default(0)
+  word     word   @relation(fields: [word_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "significations_word_id_fk")
+}
+
+model user {
+  id        String      @id @db.Uuid
+  email     String      @db.VarChar(256)
+  password  String      @db.VarChar(256)
+  createdAt DateTime?   @db.Date
+  role_id   String      @db.Uuid
+  session   session[]
+  role      role        @relation(fields: [role_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_role_id_fk")
+  word_list word_list[]
+}
+
+model word {
+  id             String           @id @db.Uuid
+  kanji          String           @db.VarChar(256)
+  signification  String           @db.VarChar(256)
+  description    String?          @db.VarChar(256)
+  lines          Int
+  jlpt           Int?
+  validate       Boolean?
+  reading        reading[]
+  session_list   session_list[]
+  significations significations[]
+  word_list      word_list[]
+}
+
+model word_level {
+  wording   String      @unique(map: "word_level_wording_uindex") @db.VarChar(10)
+  level     Int         @unique(map: "word_level_level_uindex")
+  id        String      @id(map: "word_level_pk") @db.Uuid
+  word_list word_list[]
+}
+
+model word_list {
+  user_id     String     @db.Uuid
+  word_id     String     @db.Uuid
+  category_id String?    @db.Uuid
+  description String?    @db.VarChar
+  level_id    String     @db.Uuid
+  category    category?  @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user        user       @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  word        word       @relation(fields: [word_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  word_level  word_level @relation(fields: [level_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "word_list_word_level_id_fk")
+
+  @@id([user_id, word_id])
+}

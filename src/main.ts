@@ -1,3 +1,3 @@
 import { init, start } from "./server";
 
-init().then(() => start())
+init().then(():Promise<void> => start())

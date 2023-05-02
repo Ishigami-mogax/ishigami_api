@@ -5,7 +5,7 @@ import { Server } from "@hapi/hapi"
 export let server: Server;
 
 //Function -> Initialization of server
-export const init = async function(): Promise<Server> {
+export const init:() => Promise<Server> = async (): Promise<Server> => {
 
     //Set server
     server = Hapi.server({
@@ -24,13 +24,13 @@ export const init = async function(): Promise<Server> {
 }
 
 //Function for start server
-export const start = async function (): Promise<void> {
+export const start:() => Promise<void> = async (): Promise<void> => {
     console.log(`Listening on ${server.settings.host}:${server.settings.port}`)
     return server.start()
 }
 
 //If error
-process.on('unhandledRejection', (err) => {
+process.on('unhandledRejection', (err:Error):void => {
     console.error("unhandledRejection");
     console.error(err)
     process.exit(1)
