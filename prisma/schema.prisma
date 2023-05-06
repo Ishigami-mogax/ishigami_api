@@ -54,16 +54,15 @@ model session {
 }
 
 model session_list {
-  word_id    String   @db.Uuid
-  session_id String   @db.Uuid
-  pair       Boolean?
-  guess      Boolean?
-  recall     Boolean?
-  type       Boolean?
-  session    session  @relation(fields: [session_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  word       word     @relation(fields: [word_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  word_list_id String    @db.Uuid
+  session_id   String    @db.Uuid
+  validate     Boolean?
+  exercise_id  String    @db.Uuid
+  exercise     exercise  @relation(fields: [exercise_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "session_list_exercise_id_fk")
+  session      session   @relation(fields: [session_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  word_list    word_list @relation(fields: [word_list_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  @@id([word_id, session_id], map: "session_list_pk")
+  @@id([word_list_id, session_id, exercise_id], map: "session_list_pk")
 }
 
 model significations {
@@ -93,7 +92,6 @@ model word {
   jlpt           Int?
   validate       Boolean?
   reading        reading[]
-  session_list   session_list[]
   significations significations[]
   word_list      word_list[]
 }
@@ -106,15 +104,42 @@ model word_level {
 }
 
 model word_list {
-  user_id     String     @db.Uuid
-  word_id     String     @db.Uuid
-  category_id String?    @db.Uuid
-  description String?    @db.VarChar
-  level_id    String     @db.Uuid
-  category    category?  @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user        user       @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  word        word       @relation(fields: [word_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  word_level  word_level @relation(fields: [level_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "word_list_word_level_id_fk")
+  user_id       String          @db.Uuid
+  word_id       String          @db.Uuid
+  category_id   String?         @db.Uuid
+  description   String?         @db.VarChar
+  level_id      String          @db.Uuid
+  id            String          @id(map: "word_list_pk") @db.Uuid
+  session_list  session_list[]
+  word_exercise word_exercise[]
+  category      category?       @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user          user            @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  word          word            @relation(fields: [word_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  word_level    word_level      @relation(fields: [level_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "word_list_word_level_id_fk")
+}
 
-  @@id([user_id, word_id])
+model exercise {
+  id            String          @id(map: "exercise_pk") @db.Uuid
+  description   String?
+  method_id     String          @db.Uuid
+  method        method          @relation(fields: [method_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "exercise_method_id_fk")
+  session_list  session_list[]
+  word_exercise word_exercise[]
+}
+
+model method {
+  id          String     @id(map: "Method_pk") @db.Uuid
+  wording     String     @unique(map: "Method_pk2") @db.VarChar
+  description String?
+  exercise    exercise[]
+}
+
+model word_exercise {
+  word_list_id String    @db.Uuid
+  exercise_id  String    @db.Uuid
+  validate     Boolean?
+  exercise     exercise  @relation(fields: [exercise_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Word_Exercice_exercise_id_fk")
+  word_list    word_list @relation(fields: [word_list_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "word_exercice_word_list_id_fk")
+
+  @@id([word_list_id, exercise_id], map: "Word_Exercice_pk")
 }
