@@ -8,7 +8,7 @@
     "dev:serve": "nodemon -e js -w lib lib/main.js",
     "dev": "run-p dev:*",
     "test:pre": "dotenv -e .env.test -- npx prisma db push --accept-data-loss",
-    "test:cur": "dotenv -e .env.test -- yarn mocha --require ts-node/register ./**/*.test.ts --no-cache",
+    "test:cur": "dotenv -e .env.test -- yarn mocha --require ts-node/register --no-cache",
     "test": "run-p test:*",
     "coverage": "nyc --reporter=text yarn test",
     "lint": "eslint ."
