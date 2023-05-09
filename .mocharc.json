@@ -1,0 +1,5 @@
+{
+  "extension": ["ts"],
+  "spec": ["**/*.test.ts"],
+  "ignore": ["node_modules/**/*"]
+}
