@@ -11,39 +11,63 @@ export const getWordAndExercise = (wordExerciseList:ExerciseWord[], size:number)
     //Liste des exercices à faire, répartit en différente liste en fonction de leur dépendance entre eux.
     const listExercise1: ExerciseCount[] = [
         {
-            listExercise:['f32cf5e1-72ec-4ef6-8bc4-a32ff643f664', '1725041b-b6db-4a36-b746-63c695ebeb5f'],
+            listExercise:['f32cf5e1-72ec-4ef6-8bc4-a32ff643f664', '1725041b-b6db-4a36-b746-63c695ebeb5f', '767cec85-0af4-42c3-abfa-a3bb9d709542'],
             totalPower:0,
             words:[]
         },
         {
-            listExercise:['f32cf5e1-72ec-4ef6-8bc4-a32ff643f664', '8840d164-1a79-4467-a282-f24c4d5ee46d'],
+            listExercise:['f32cf5e1-72ec-4ef6-8bc4-a32ff643f664', '8840d164-1a79-4467-a282-f24c4d5ee46d', '767cec85-0af4-42c3-abfa-a3bb9d709542'],
             totalPower:0,
             words:[]
         },
         {
-            listExercise:['32fbee9d-b1b5-46c9-9c26-7950ace1b552', '1725041b-b6db-4a36-b746-63c695ebeb5f'],
+            listExercise:['32fbee9d-b1b5-46c9-9c26-7950ace1b552', '1725041b-b6db-4a36-b746-63c695ebeb5f', '767cec85-0af4-42c3-abfa-a3bb9d709542'],
             totalPower:0,
             words:[]
         },
         {
-            listExercise:['35534ca1-c788-437b-9c13-7de31e82e3ec', '8840d164-1a79-4467-a282-f24c4d5ee46d'],
+            listExercise:['35534ca1-c788-437b-9c13-7de31e82e3ec', '8840d164-1a79-4467-a282-f24c4d5ee46d', '767cec85-0af4-42c3-abfa-a3bb9d709542'],
             totalPower:0,
             words:[]
-        }
-    ]
-    const listExercise2: ExerciseCount[] = [
+        },
+
         {
-            listExercise:['767cec85-0af4-42c3-abfa-a3bb9d709542'],
+            listExercise:['f32cf5e1-72ec-4ef6-8bc4-a32ff643f664', '1725041b-b6db-4a36-b746-63c695ebeb5f', '37234d6e-bca3-489f-b484-7f6259ff5836'],
             totalPower:0,
             words:[]
         },
         {
-            listExercise:['37234d6e-bca3-489f-b484-7f6259ff5836'],
+            listExercise:['f32cf5e1-72ec-4ef6-8bc4-a32ff643f664', '8840d164-1a79-4467-a282-f24c4d5ee46d', '37234d6e-bca3-489f-b484-7f6259ff5836'],
             totalPower:0,
             words:[]
         },
         {
-            listExercise:['13544472-d49c-4880-a2d4-59c677454dad'],
+            listExercise:['32fbee9d-b1b5-46c9-9c26-7950ace1b552', '1725041b-b6db-4a36-b746-63c695ebeb5f', '37234d6e-bca3-489f-b484-7f6259ff5836'],
+            totalPower:0,
+            words:[]
+        },
+        {
+            listExercise:['35534ca1-c788-437b-9c13-7de31e82e3ec', '8840d164-1a79-4467-a282-f24c4d5ee46d', '37234d6e-bca3-489f-b484-7f6259ff5836'],
+            totalPower:0,
+            words:[]
+        },
+        {
+            listExercise:['f32cf5e1-72ec-4ef6-8bc4-a32ff643f664', '1725041b-b6db-4a36-b746-63c695ebeb5f', '13544472-d49c-4880-a2d4-59c677454dad'],
+            totalPower:0,
+            words:[]
+        },
+        {
+            listExercise:['f32cf5e1-72ec-4ef6-8bc4-a32ff643f664', '8840d164-1a79-4467-a282-f24c4d5ee46d', '13544472-d49c-4880-a2d4-59c677454dad'],
+            totalPower:0,
+            words:[]
+        },
+        {
+            listExercise:['32fbee9d-b1b5-46c9-9c26-7950ace1b552', '1725041b-b6db-4a36-b746-63c695ebeb5f', '13544472-d49c-4880-a2d4-59c677454dad'],
+            totalPower:0,
+            words:[]
+        },
+        {
+            listExercise:['35534ca1-c788-437b-9c13-7de31e82e3ec', '8840d164-1a79-4467-a282-f24c4d5ee46d', '13544472-d49c-4880-a2d4-59c677454dad'],
             totalPower:0,
             words:[]
         }
@@ -59,7 +83,8 @@ export const getWordAndExercise = (wordExerciseList:ExerciseWord[], size:number)
     if (filteredWordList.length < size) { //Si tous les mots de niveau 1 ne dépasse pas le nombre voulu
         filteredWordList = [...filteredWordList, ...wordLevelList.filter((e:WordCount) => e.count === 2)] //On ajoute les nombres de niveau 2
     }
-    //TODO Possible optimisation, si le nombre de mot ne dépasse pas le nombre de mot voulu les étapes au dessus sont inutiles
+
+    //TODO Possible optimisation, si le nombre de mots ne dépasse pas le nombre de mots voulu les étapes au-dessus sont inutiles
     if (filteredWordList.length < size) { //Si tous les mots de niveau 2 ne dépasse pas le nombre voulu
         filteredWordList = [...wordLevelList] //On récupère tous les mots
     }
@@ -68,21 +93,17 @@ export const getWordAndExercise = (wordExerciseList:ExerciseWord[], size:number)
     const selectedWordList: ExerciseWord[] = [...wordExerciseList.filter((e:ExerciseWord) => filteredWordList.some((a:WordCount) => a.word_list_id === e.word_list_id))]
 
     //Récupère le groupe de la liste d'exercice n°1, ayant le plus de valeur
-    const selectedExercise1: ExerciseCount = countPowerByExercise(selectedWordList, listExercise1).reduce((acc:ExerciseCount, obj:ExerciseCount) => obj.totalPower > acc.totalPower ? obj : acc)
+    const selectedExercise: ExerciseCount = countPowerByExercise(selectedWordList, listExercise1).reduce((acc:ExerciseCount, obj:ExerciseCount) => obj.totalPower > acc.totalPower ? obj : acc)
 
-    //Récupère les informations des WordExercises avec les id de la liste d'exercice choisi
-    const selectedWordListByEx1: ExerciseWord[] = wordExerciseList.filter((e:ExerciseWord) => selectedExercise1.words.some((w:WordPower) => w.word_list_id === e.word_list_id))
-
-    //Récupère le groupe de la liste d'exercice n°2, ayant le plus de valeur avec les mots choisi depuis l'exercice 1
-    const selectedExercise2: ExerciseCount = countPowerByExercise(selectedWordListByEx1, listExercise2).reduce((acc:ExerciseCount, obj:ExerciseCount) => obj.totalPower > acc.totalPower ? obj : acc)
+    const limitedSelectWord = {...selectedExercise, words: selectedExercise.words.sort((a, b) => b.power - a.power).slice(0, size)}
 
     //On regroupe tous les exercices choisis
-    const allExerciseSelected: string[] = [...selectedExercise1.listExercise, ...selectedExercise2.listExercise, '89c180c5-fd2b-4222-98cb-dc7abd455c39']
+    const allExerciseSelected: string[] = [...limitedSelectWord.listExercise, '89c180c5-fd2b-4222-98cb-dc7abd455c39']
 
     //On regroupe tous les mots choisis
-    const allWordSelected: string[] = selectedExercise1.words.map((w:WordPower) => w.word_list_id)
+    const allWordSelected: string[] = limitedSelectWord.words.map((w:WordPower) => w.word_list_id)
 
-    return {exerciseList:allExerciseSelected, wordList:allWordSelected}
+    return {exerciseListId:allExerciseSelected, wordListId:allWordSelected}
 
     }
 

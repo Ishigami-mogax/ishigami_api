@@ -32,6 +32,6 @@ export type ExerciseCount = {
 }
 
 export type ExerciseListWordList = {
-    exerciseList:string[]
-    wordList:string[]
+    exerciseListId:string[]
+    wordListId:string[]
 }
