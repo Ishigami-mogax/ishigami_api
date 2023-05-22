@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client"
+import {randomUUID} from "crypto";
 
 export class CategoryService {
 
@@ -55,6 +56,21 @@ export class CategoryService {
         return {...category, other_category: otherCategory, percent: {word_list: percent}};
     }
 
+    public async createCategory(name:string, superId:string) {
+        try {
+            await this.prisma.category.create({
+                data:{
+                    id:randomUUID(),
+                    name,
+                    super_category_id:superId
+                }
+            })
+        } catch (e) {
+            console.log(e)
+        } finally {
+            await this.prisma.$disconnect()
+        }
+    }
 }
 
 const calculatePercent = (array: any[]) => {

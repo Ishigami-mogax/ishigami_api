@@ -6,6 +6,8 @@ export class CategoryController {
     public async createOne(request: Hapi.Request, h: Hapi.ResponseToolkit) {
 
         try {
+            const {name, superId} = request.payload as {name:string, superId:string}
+            const category = await new CategoryService().createCategory(name, superId)
             return h.response("").code(200)
         } catch (error:unknown) { //TODO Change any
             if(error instanceof Error){
