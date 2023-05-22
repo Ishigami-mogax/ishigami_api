@@ -1,7 +1,6 @@
 'use strict'
 import Hapi from "@hapi/hapi"
 import { Server } from "@hapi/hapi"
-import {AuthController} from "./routes/auth/auth.controller";
 import AuthRoutes from "./routes/auth/auth.routes";
 
 export let server: Server;

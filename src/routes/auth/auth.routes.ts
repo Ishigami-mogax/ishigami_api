@@ -1,8 +1,9 @@
 import {AuthController} from "./auth.controller";
+import Hapi from "@hapi/hapi";
 
-const controller = new AuthController()
+const controller: AuthController = new AuthController()
 
-const authRoute = [
+const authRoute: Hapi.ServerRoute[] = [
     {
         method:'POST',
         path:'/register',
