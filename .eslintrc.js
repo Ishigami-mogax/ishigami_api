@@ -18,9 +18,6 @@ module.exports = {
             allowDirectConstAssertionInArrowFunctions: true,
             allowConciseArrowFunctionExpressionsStartingWithVoid: true
         }],
-        "@typescript-eslint/explicit-member-accessibility": ["error", {
-            accessibility: "no-public"
-        }],
         "@typescript-eslint/typedef": ["error", {
             parameter: true,
             variableDeclaration: true,
