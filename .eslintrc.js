@@ -8,6 +8,7 @@ module.exports = {
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended"
     ],
+    ignorePatterns: ["lib/**/*"],
     rules: {
         "@typescript-eslint/no-explicit-any": "error",
         "@typescript-eslint/no-empty-interface": "error",
