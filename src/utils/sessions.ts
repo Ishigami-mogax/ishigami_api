@@ -105,15 +105,15 @@ export const getWordAndExercise = (wordExerciseList:ExerciseWord[], size:number)
 
     return {exerciseListId:allExerciseSelected, wordListId:allWordSelected}
 
-    }
+}
 
-    //On regroupe les exercices par méthode et par mot et récupérant le nombre de False ou Null
+//On regroupe les exercices par méthode et par mot et récupérant le nombre de False ou Null
 const countValidationByWordListAndMethod = (data: ExerciseWord[]) : ValidationCount[] => {
     return data.reduce((acc: ValidationCount[], curr: ExerciseWord) => {
         if (!curr.validate) { //Si validate est False ou Null
             const existingCount: ValidationCount | undefined = acc.find((item:ValidationCount) => // On cherche si une validation pour ce mot et cette méthode a déjà été créé
-                    item.word_list_id === curr.word_list_id &&
-                    item.method_id === curr.exercise.method_id
+                item.word_list_id === curr.word_list_id &&
+                item.method_id === curr.exercise.method_id
             )
             if (existingCount) { // Si la validation existe, on ajoute +1 au compte
                 existingCount.count += 1;
@@ -167,4 +167,108 @@ const countPowerByExercise = (wordList:ExerciseWord[], exerciseList:ExerciseCoun
     })
 
     return exerciseList // On renvoie la liste du compte par groupe d'exercice
+}
+
+export const createMethodList = (wordList, exerciseListId) => {
+
+    const tempFirstPair = []
+    const tempSecondPair = []
+    const tempGuess = []
+    const tempRecall = []
+    const tempType = []
+    const tempResult = []
+
+    wordList.map(({word}) => {
+        const tempPair = createPairList(word, exerciseListId)
+        tempFirstPair.push(tempPair[0])
+        tempSecondPair.push(tempPair[1])
+
+        tempGuess.push(createGuessList(word, exerciseListId))
+        tempRecall.push({
+            id: word.id,
+            sharp: word.kanji,
+            blur: word.signification,
+        })
+        tempType.push(createTypeList(word, exerciseListId))
+
+    })
+
+}
+
+const createPairList = (word, exerciceList) => {
+
+    const francais = {
+        id:word.id,
+        value:word.signification,
+        validate:false
+    }
+    const kanji = {
+        id:word.id,
+        value:word.kanji,
+        validate:false
+    }
+    const kana = {
+        id:word.id,
+        value:word.reading.reduce((acc, cur) => acc + ' / ' + cur.reading, ""),
+        validate:false
+    }
+
+    if(exerciceList.includes("37234d6e-bca3-489f-b484-7f6259ff5836")) {
+        return [francais, kana]
+    } else if (exerciceList.includes("13544472-d49c-4880-a2d4-59c677454dad")) {
+        return [kanji, kana]
+    } else {
+        return [kanji, francais]
+    }
+}
+
+const createGuessList = (word, exerciceList) => {
+    if(exerciceList.includes("35534ca1-c788-437b-9c13-7de31e82e3ec")) {
+        return {
+            id:word.id,
+            offer:word.reading.reduce((acc, cur) => acc + ' / ' + cur.reading, ""),
+            toFind:word.signification
+        }
+    } else if (exerciceList.includes("32fbee9d-b1b5-46c9-9c26-7950ace1b552")) {
+        return {
+            id:word.id,
+            offer:word.kanji,
+            toFind:word.reading.reduce((acc, cur) => acc + ' / ' + cur.reading, "")
+        }
+    } else {
+        return {
+            id:word.id,
+            offer:word.signification,
+            toFind:word.kanji
+        }
+    }
+}
+
+const createTypeList = (word, exerciceList) => {
+    const readingList = {
+        on: word.reading.filter((r) => r.isOnyumi).map((r) => ({
+                reading: r.reading,
+                validate: false
+            })
+        ),
+        kun: word.reading.filter((r) => !r.isOnyumi).map((r) => ({
+                reading: r.reading,
+                validate: false
+            })
+        ),
+    }
+
+    if(exerciceList.includes("8840d164-1a79-4467-a282-f24c4d5ee46d")) {
+        return {
+            id:word.id,
+            offer:word.kanji,
+            ...readingList
+        }
+    } else {
+        return {
+            id:word.id,
+            offer:word.signification,
+            ...readingList
+        }
+    }
 }

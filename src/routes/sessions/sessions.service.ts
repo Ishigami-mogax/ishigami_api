@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client"
-import {getWordAndExercise} from "../../utils/sessions";
+import {createMethodList, getWordAndExercise} from "../../utils/sessions";
 import {ExerciseWord} from "./sessions.schema";
 
 export class SessionsService {
@@ -24,6 +24,9 @@ export class SessionsService {
                 where:{
                     user:{
                         id:"137efd35-fc95-4478-9d95-de0db07c93b0"
+                    },
+                    id:{
+                        in:wordListId
                     }
                 },
                 select: {
@@ -38,25 +41,9 @@ export class SessionsService {
                 }
             })
 
-            const temp = await this.prisma.word.findMany({
-                where:{
-                    word_list:{
-                        some:{
-                            user_id: "137efd35-fc95-4478-9d95-de0db07c93b0"
-                        }
-                    }
-                },
-                select: {
-                    id: true,
-                    kanji: true,
-                    signification: true,
-                    reading: true
-                }
-            })
+            createMethodList(wordList, exerciseListId)
 
-            console.log(temp.length)
-
-            return temp
+            return wordList
         } catch (e) {
             console.log(e)
         } finally {
