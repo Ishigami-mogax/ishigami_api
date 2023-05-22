@@ -3,6 +3,7 @@ import Hapi from "@hapi/hapi"
 import { Server } from "@hapi/hapi"
 import {AuthController} from "./routes/auth/auth.controller";
 import AuthRoutes from "./routes/auth/auth.routes";
+import CategoryRoutes from "./routes/category/category.routes";
 
 export let server: Server;
 
@@ -22,6 +23,7 @@ export const init:() => Promise<Server> = async (): Promise<Server> => {
 
     //Add routes: server.route()
     server.route(AuthRoutes)
+    server.route(CategoryRoutes)
 
     return server
 }
