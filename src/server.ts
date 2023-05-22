@@ -1,6 +1,7 @@
 'use strict'
 import Hapi from "@hapi/hapi"
 import { Server } from "@hapi/hapi"
+import AuthRoutes from "./routes/auth/auth.routes";
 
 export let server: Server;
 
@@ -19,6 +20,7 @@ export const init:() => Promise<Server> = async (): Promise<Server> => {
     })
 
     //Add routes: server.route()
+    server.route(AuthRoutes)
 
     return server
 }
