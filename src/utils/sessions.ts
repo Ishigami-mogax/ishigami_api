@@ -169,16 +169,16 @@ const countPowerByExercise = (wordList:ExerciseWord[], exerciseList:ExerciseCoun
     return exerciseList // On renvoie la liste du compte par groupe d'exercice
 }
 
-export const createMethodList = (wordList, exerciseListId) => {
+export const createMethodList = (wordList:any[], exerciseListId:any[]) => {
 
-    const tempFirstPair = []
-    const tempSecondPair = []
-    const tempGuess = []
-    const tempRecall = []
-    const tempType = []
-    const tempResult = []
+    const tempFirstPair:any[] = []
+    const tempSecondPair:any[] = []
+    const tempGuess:any[] = []
+    const tempRecall:any[] = []
+    const tempType:any[] = []
+    const tempResult:any[] = []
 
-    wordList.map(({word}) => {
+    wordList.map(({word}:any) => {
         const tempPair = createPairList(word, exerciseListId)
         tempFirstPair.push(tempPair[0])
         tempSecondPair.push(tempPair[1])
@@ -191,11 +191,21 @@ export const createMethodList = (wordList, exerciseListId) => {
         })
         tempType.push(createTypeList(word, exerciseListId))
 
+        tempResult.push(createResultList(word))
     })
+
+    return {
+        firstPair:tempFirstPair,
+        secondPair:tempSecondPair,
+        guess:tempGuess,
+        recall:tempRecall,
+        type:tempType,
+        result:tempResult
+    }
 
 }
 
-const createPairList = (word, exerciceList) => {
+const createPairList = (word:any, exerciceList:any[]) => {
 
     const francais = {
         id:word.id,
@@ -209,7 +219,7 @@ const createPairList = (word, exerciceList) => {
     }
     const kana = {
         id:word.id,
-        value:word.reading.reduce((acc, cur) => acc + ' / ' + cur.reading, ""),
+        value:word.reading.reduce((acc:string, cur:any) => acc + ' / ' + cur.reading, ""),
         validate:false
     }
 
@@ -222,18 +232,18 @@ const createPairList = (word, exerciceList) => {
     }
 }
 
-const createGuessList = (word, exerciceList) => {
+const createGuessList = (word:any, exerciceList:any[]) => {
     if(exerciceList.includes("35534ca1-c788-437b-9c13-7de31e82e3ec")) {
         return {
             id:word.id,
-            offer:word.reading.reduce((acc, cur) => acc + ' / ' + cur.reading, ""),
+            offer:word.reading.reduce((acc:string, cur:any) => acc + ' / ' + cur.reading, ""),
             toFind:word.signification
         }
     } else if (exerciceList.includes("32fbee9d-b1b5-46c9-9c26-7950ace1b552")) {
         return {
             id:word.id,
             offer:word.kanji,
-            toFind:word.reading.reduce((acc, cur) => acc + ' / ' + cur.reading, "")
+            toFind:word.reading.reduce((acc:string, cur:any) => acc + ' / ' + cur.reading, "")
         }
     } else {
         return {
@@ -244,14 +254,14 @@ const createGuessList = (word, exerciceList) => {
     }
 }
 
-const createTypeList = (word, exerciceList) => {
+const createTypeList = (word:any, exerciceList:any[]) => {
     const readingList = {
-        on: word.reading.filter((r) => r.isOnyumi).map((r) => ({
+        on: word.reading.filter((r:any) => r.isOnyumi).map((r:any) => ({
                 reading: r.reading,
                 validate: false
             })
         ),
-        kun: word.reading.filter((r) => !r.isOnyumi).map((r) => ({
+        kun: word.reading.filter((r:any) => !r.isOnyumi).map((r:any) => ({
                 reading: r.reading,
                 validate: false
             })
@@ -271,4 +281,19 @@ const createTypeList = (word, exerciceList) => {
             ...readingList
         }
     }
+}
+
+const createResultList = (word:any) => {
+    return {
+        id:word.id,
+        kanji:word.kanji,
+        signification:word.signification,
+        on: word.reading.filter((r:any) => r.isOnyumi).reduce((acc:string, cur:any) => acc + ' / ' + cur.reading, ""),
+        kun: word.reading.filter((r:any) => !r.isOnyumi).reduce((acc:string, cur:any) => acc + ' / ' + cur.reading, ""),
+        pairIt:true,
+        guessIt:true,
+        recallIt:true,
+        typeIt:true
+    }
+
 }

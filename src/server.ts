@@ -13,9 +13,7 @@ export const init:() => Promise<Server> = async (): Promise<Server> => {
         port: process.env.PORT || 4000,
         host: process.env.HOST || 'localhost',
         routes: {
-            cors: {
-                origin: ["*"] // an array of origins or 'ignore'
-            }
+            cors: true
         }
     })
 

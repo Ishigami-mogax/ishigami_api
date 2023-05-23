@@ -18,7 +18,7 @@ export class SessionsService {
                 }
             }) as ExerciseWord[]
 
-            const {exerciseListId, wordListId} = getWordAndExercise(wordExerciseList, 10)
+            const {exerciseListId, wordListId} = getWordAndExercise(wordExerciseList, 5)
 
             const wordList = await this.prisma.word_list.findMany({
                 where:{
@@ -41,9 +41,7 @@ export class SessionsService {
                 }
             })
 
-            createMethodList(wordList, exerciseListId)
-
-            return wordList
+            return createMethodList(wordList, exerciseListId)
         } catch (e) {
             console.log(e)
         } finally {
